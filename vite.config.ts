@@ -20,10 +20,29 @@ export default defineConfig(() => ({
         ]
       },
       workbox: {
-        strategies: {
-          "**/index.html": "NetworkFirst",
-          "**/assets/*": "CacheFirst"
-        }
+        globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/cdnjs\.cloudflare\.com\/.*pdf\.js.*$/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "pdfjs-cdn",
+              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+          {
+            urlPattern: ({ url }) =>
+              url.origin === "https://www.soundhelix.com" ||
+              url.origin === "https://www.w3schools.com" ||
+              url.origin === "https://www.w3.org",
+            handler: "CacheFirst",
+            options: {
+              cacheName: "study-media",
+              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              rangeRequests: true,
+            },
+          },
+        ],
       }
     })
   ],
