@@ -2,13 +2,13 @@ import { defineConfig } from "vite";
 import dyadComponentTagger from "@dyad-sh/react-vite-component-tagger";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { vitePWA } from "vite-plugin-pwa";
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(() => ({
   plugins: [
     dyadComponentTagger(),
     react(),
-    vitePWA({
+    VitePWA({
       registerType: "inject",
       manifest: {
         name: "Study App PWA",
