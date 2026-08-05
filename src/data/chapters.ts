@@ -8,7 +8,7 @@ const samplePdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/
 export const chapters: ChapterData[] = [
   {
     id: 1,
-    title: "Introduction to JavaScript",
+    title: "Chapter 1",
     description: "Learn the basics of JavaScript programming language",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
@@ -16,7 +16,7 @@ export const chapters: ChapterData[] = [
   },
   {
     id: 2,
-    title: "HTML Fundamentals",
+    title: "Chapter 2",
     description: "Master HTML structure and semantic elements",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
@@ -24,7 +24,7 @@ export const chapters: ChapterData[] = [
   },
   {
     id: 3,
-    title: "CSS Styling Basics",
+    title: "Chapter 3",
     description: "Learn CSS fundamentals and layout techniques",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
@@ -32,7 +32,7 @@ export const chapters: ChapterData[] = [
   },
   {
     id: 4,
-    title: "React Essentials",
+    title: "Chapter 4",
     description: "Build interactive UIs with React library",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
@@ -40,7 +40,7 @@ export const chapters: ChapterData[] = [
   },
   {
     id: 5,
-    title: "TypeScript Fundamentals",
+    title: "Chapter 5",
     description: "Type-safe JavaScript development with TypeScript",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
@@ -48,7 +48,7 @@ export const chapters: ChapterData[] = [
   },
   {
     id: 6,
-    title: "Node.js Basics",
+    title: "Chapter 6",
     description: "Server-side JavaScript with Node.js",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
@@ -56,7 +56,7 @@ export const chapters: ChapterData[] = [
   },
   {
     id: 7,
-    title: "Database Concepts",
+    title: "Chapter 7",
     description: "Learn SQL and NoSQL database fundamentals",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
@@ -64,7 +64,7 @@ export const chapters: ChapterData[] = [
   },
   {
     id: 8,
-    title: "Web Accessibility",
+    title: "Chapter 8",
     description: "Make your web apps accessible to everyone",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
@@ -72,7 +72,7 @@ export const chapters: ChapterData[] = [
   },
   {
     id: 9,
-    title: "Performance Optimization",
+    title: "Chapter 9",
     description: "Optimize web apps for speed and responsiveness",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
@@ -80,7 +80,7 @@ export const chapters: ChapterData[] = [
   },
   {
     id: 10,
-    title: "Progressive Web Apps",
+    title: "Chapter 10",
     description: "Build installable web apps with offline capabilities",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
