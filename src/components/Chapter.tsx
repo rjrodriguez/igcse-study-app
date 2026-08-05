@@ -36,7 +36,7 @@ const Chapter = () => {
         
         <Card className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex flex-col items-center justify-center mb-6">
-            <h1 className="text-3xl font-bold text-indigo-600 mb-2">{chapter.title}</h1>
+            <h1 className="text-3xl font-bold text-indigo-600 mb-2 text-center">{chapter.title}</h1>
             <p className="text-gray-600 text-lg">{chapter.description}</p>
           </div>
           

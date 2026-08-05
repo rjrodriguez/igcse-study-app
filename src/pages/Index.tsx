@@ -27,7 +27,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-indigo-600 mb-8">Study App</h1>
+        <h1 className="text-4xl font-bold text-indigo-600 mb-8 text-center">Study App</h1>
         <p className="text-lg text-gray-600 mb-12">Learn with audio, video, and PDF content</p>
         
         <ChapterCardList />

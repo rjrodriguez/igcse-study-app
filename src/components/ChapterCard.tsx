@@ -19,7 +19,7 @@ const ChapterCard = ({ chapterId, title, description }: ChapterCardProps) => {
       <Card className="bg-white rounded-xl shadow-sm p-4 h-full transition-transform hover:scale-105">
         <div className="flex flex-col items-center justify-between h-full">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-indigo-600 mb-2">{title}</h3>
+            <h3 className="text-lg font-semibold text-indigo-600 mb-2 text-center">{title}</h3>
             <p className="text-gray-600 text-sm">{description}</p>
           </div>
           <div className="mt-4">
