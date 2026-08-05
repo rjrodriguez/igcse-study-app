@@ -9,7 +9,7 @@ export const chapters: ChapterData[] = [
   {
     id: 1,
     title: "Chapter 1",
-    description: "Learn the basics of JavaScript programming language",
+    description: "Types and Components",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
     pdfUrl: samplePdfUrl,
@@ -17,7 +17,7 @@ export const chapters: ChapterData[] = [
   {
     id: 2,
     title: "Chapter 2",
-    description: "Master HTML structure and semantic elements",
+    description: "Input and output Devices",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
     pdfUrl: samplePdfUrl,
@@ -25,7 +25,7 @@ export const chapters: ChapterData[] = [
   {
     id: 3,
     title: "Chapter 3",
-    description: "Learn CSS fundamentals and layout techniques",
+    description: "Storage Devices and Media",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
     pdfUrl: samplePdfUrl,
@@ -33,7 +33,7 @@ export const chapters: ChapterData[] = [
   {
     id: 4,
     title: "Chapter 4",
-    description: "Build interactive UIs with React library",
+    description: "Networks",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
     pdfUrl: samplePdfUrl,
@@ -41,7 +41,7 @@ export const chapters: ChapterData[] = [
   {
     id: 5,
     title: "Chapter 5",
-    description: "Type-safe JavaScript development with TypeScript",
+    description: "Effects of Using IT",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
     pdfUrl: samplePdfUrl,
@@ -49,7 +49,7 @@ export const chapters: ChapterData[] = [
   {
     id: 6,
     title: "Chapter 6",
-    description: "Server-side JavaScript with Node.js",
+    description: "ICT Applications",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
     pdfUrl: samplePdfUrl,
@@ -57,7 +57,7 @@ export const chapters: ChapterData[] = [
   {
     id: 7,
     title: "Chapter 7",
-    description: "Learn SQL and NoSQL database fundamentals",
+    description: "System Life Cycles",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
     pdfUrl: samplePdfUrl,
@@ -65,7 +65,7 @@ export const chapters: ChapterData[] = [
   {
     id: 8,
     title: "Chapter 8",
-    description: "Make your web apps accessible to everyone",
+    description: "Safety and Security",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
     pdfUrl: samplePdfUrl,
@@ -73,7 +73,7 @@ export const chapters: ChapterData[] = [
   {
     id: 9,
     title: "Chapter 9",
-    description: "Optimize web apps for speed and responsiveness",
+    description: "Audiences",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
     pdfUrl: samplePdfUrl,
@@ -81,7 +81,7 @@ export const chapters: ChapterData[] = [
   {
     id: 10,
     title: "Chapter 10",
-    description: "Build installable web apps with offline capabilities",
+    description: "Communication",
     audioUrl: sampleAudioUrl,
     videoUrl: sampleVideoUrl,
     pdfUrl: samplePdfUrl,
