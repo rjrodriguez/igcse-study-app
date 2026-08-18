@@ -36,7 +36,7 @@ const MediaPlayer = ({ chapterId, mediaType, audioUrl, videoUrl }: MediaPlayerPr
 
   return (
       <div className="relative w-full max-w-md mx-auto p-4">
-        <div className="relative w-full h-16 mb-4">
+        <div className="relative w-full h-16 mb-2">
           <Progress
             value={progress[mediaType + "Position"] || 0}
             max={100}
