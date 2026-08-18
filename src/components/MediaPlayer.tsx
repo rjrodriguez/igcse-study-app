@@ -43,29 +43,29 @@ const MediaPlayer = ({ chapterId, mediaType, audioUrl, videoUrl }: MediaPlayerPr
           className="w-full h-2 border border-gray-300 rounded"
         />
       </div>
-      <div className="relative w-full h-auto">
-        {mediaType === "audio" && (
-          <audio ref={audioRef} className="w-full" controls>
-            Your browser does not support the audio element
-          </audio>
-        )}
-        {mediaType === "video" && videoUrl?.includes("youtube.com/embed/") ? (
-                  <iframe
-                    ref={videoRef}
-                    width="100%"
-                    height="100%"
-                    src={videoUrl}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <video ref={videoRef} className="w-full" controls>
-                    Your browser does not support the video element
-                  </video>
-                )}
-      </div>
+      <div className="relative w-full aspect-4/3">
+              {mediaType === "audio" && (
+                <audio ref={audioRef} className="w-full" controls>
+                  Your browser does not support the audio element
+                </audio>
+              )}
+              {mediaType === "video" && videoUrl?.includes("youtube.com/embed/") ? (
+                        <iframe
+                          ref={videoRef}
+                          width="100%"
+                          height="100%"
+                          src={videoUrl}
+                          title="YouTube video player"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <video ref={videoRef} className="w-full" controls>
+                          Your browser does not support the video element
+                        </video>
+                      )}
+            </div>
     </div>
   );
 };
