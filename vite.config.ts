@@ -5,14 +5,15 @@ import path from "path";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(() => ({
+  base: "./",
   plugins: [
     dyadComponentTagger(),
     react(),
     VitePWA({
       registerType: "inject",
       manifest: {
-        name: "Study App PWA",
-        short_name: "StudyApp",
+        name: "IGCSE Study App",
+        short_name: "IGCSEStudyApp",
         theme_color: "#1a237e",
         icons: [
           { src: "icons/icon-192.svg", sizes: "192x192", type: "image/svg+xml" },

@@ -1,6 +1,6 @@
 {
-  "name": "Study App PWA",
-  "short_name": "StudyApp",
+  "name": "IGCSE Study App",
+  "short_name": "IGCSEStudyApp",
   "description": "A progressive web app for studying with audio, video, and PDF content",
   "start_url": "/",
   "display": "standalone",
