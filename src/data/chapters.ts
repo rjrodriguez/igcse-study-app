@@ -12,7 +12,7 @@ export const chapters: ChapterData[] = [
     description: "Types and Components",
     audioUrl: "/media/ch01.mp3",
     videoUrl: sampleVideoUrl,
-    pdfUrl: samplePdfUrl,
+    pdfUrl: "/pdfs/ch01.pdf",
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ export const chapters: ChapterData[] = [
     description: "Input and output Devices",
     audioUrl: "/media/ch02.mp3",
     videoUrl: sampleVideoUrl,
-    pdfUrl: samplePdfUrl,
+    pdfUrl: "/pdfs/ch02.pdf",
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ export const chapters: ChapterData[] = [
     description: "Storage Devices and Media",
     audioUrl: "/media/ch03.mp3",
     videoUrl: sampleVideoUrl,
-    pdfUrl: samplePdfUrl,
+    pdfUrl: "/pdfs/ch03.pdf",
   },
   {
     id: 4,
@@ -36,7 +36,7 @@ export const chapters: ChapterData[] = [
     description: "Networks",
     audioUrl: "/media/ch04.mp3",
     videoUrl: sampleVideoUrl,
-    pdfUrl: samplePdfUrl,
+    pdfUrl: "/pdfs/ch04.pdf",
   },
   {
     id: 5,
@@ -44,7 +44,7 @@ export const chapters: ChapterData[] = [
     description: "Effects of Using IT",
     audioUrl: "/media/ch05.mp3",
     videoUrl: sampleVideoUrl,
-    pdfUrl: samplePdfUrl,
+    pdfUrl: "/pdfs/ch05.pdf",
   },
   {
     id: 6,
@@ -52,7 +52,7 @@ export const chapters: ChapterData[] = [
     description: "ICT Applications",
     audioUrl: "/media/ch06.mp3",
     videoUrl: sampleVideoUrl,
-    pdfUrl: samplePdfUrl,
+    pdfUrl: "/pdfs/ch06.pdf",
   },
   {
     id: 7,
@@ -60,7 +60,7 @@ export const chapters: ChapterData[] = [
     description: "System Life Cycles",
     audioUrl: "/media/ch07.mp3",
     videoUrl: sampleVideoUrl,
-    pdfUrl: samplePdfUrl,
+    pdfUrl: "/pdfs/ch07.pdf",
   },
   {
     id: 8,
@@ -68,7 +68,7 @@ export const chapters: ChapterData[] = [
     description: "Safety and Security",
     audioUrl: "/media/ch08.mp3",
     videoUrl: sampleVideoUrl,
-    pdfUrl: samplePdfUrl,
+    pdfUrl: "/pdfs/ch08.pdf",
   },
   {
     id: 9,
@@ -76,7 +76,7 @@ export const chapters: ChapterData[] = [
     description: "Audiences",
     audioUrl: "/media/ch09.mp3",
     videoUrl: sampleVideoUrl,
-    pdfUrl: samplePdfUrl,
+    pdfUrl: "/pdfs/ch09.pdf",
   },
   {
     id: 10,
@@ -84,7 +84,7 @@ export const chapters: ChapterData[] = [
     description: "Communication",
     audioUrl: "/media/ch10.mp3",
     videoUrl: sampleVideoUrl,
-    pdfUrl: samplePdfUrl,
+    pdfUrl: "/pdfs/ch10.pdf",
   }
 ];
 
