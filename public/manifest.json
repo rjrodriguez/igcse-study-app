@@ -1,8 +1,9 @@
 {
   "name": "IGCSE Study App",
   "short_name": "IGCSEStudyApp",
-  "description": "A progressive web app for studying with audio, video, and PDF content",
-  "start_url": "/",
+  "description": "A progressive web app for studying IGCSE ICT with audio, video, and PDF content",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1a237e",
