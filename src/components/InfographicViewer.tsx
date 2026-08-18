@@ -71,7 +71,7 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
 
       <div
         ref={containerRef}
-        className="relative w-full h-96 overflow-hidden border border-gray-300 rounded-lg bg-gray-100 cursor-grab"
+        className="relative w-full aspect-[16/9] overflow-hidden border border-gray-300 rounded-lg bg-gray-100 cursor-grab"
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
