@@ -49,11 +49,22 @@ const MediaPlayer = ({ chapterId, mediaType, audioUrl, videoUrl }: MediaPlayerPr
             Your browser does not support the audio element
           </audio>
         )}
-        {mediaType === "video" && (
-          <video ref={videoRef} className="w-full" controls>
-            Your browser does not support the video element
-          </video>
-        )}
+        {mediaType === "video" && videoUrl?.includes("youtube.com/embed/") ? (
+                  <iframe
+                    ref={videoRef}
+                    width="100%"
+                    height="100%"
+                    src={videoUrl}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <video ref={videoRef} className="w-full" controls>
+                    Your browser does not support the video element
+                  </video>
+                )}
       </div>
     </div>
   );
