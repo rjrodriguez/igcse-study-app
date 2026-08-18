@@ -21,13 +21,22 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [lastTap, setLastTap] = useState(0);
   const [showInstructions, setShowInstructions] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
-  const lastTouchDistance = useRef<number | null>(null);
-  const lastTouchCenter = useRef<{ x: number; y: number } | null>(null);
+
+  const dragRef = useRef({
+    active: false,
+    startX: 0,
+    startY: 0,
+    posAtDragStart: { x: 0, y: 0 },
+  });
+  const pinchRef = useRef({ lastDist: 0 });
+  const lastTapRef = useRef(0);
+  const scaleRef = useRef(scale);
+  const posRef = useRef(position);
+
+  scaleRef.current = scale;
+  posRef.current = position;
 
   const resetView = useCallback(() => {
     setScale(1);
@@ -63,119 +72,128 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
     [clampPosition],
   );
 
+  // --- Mouse events (desktop) ---
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
-      if (scale <= 1) return;
+      if (e.button !== 0) return;
+      const target = e.target as HTMLElement;
+      if (target.closest("button")) return;
+      if (scaleRef.current <= 1) return;
+
       e.preventDefault();
-      setIsDragging(true);
-      setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y });
+      dragRef.current = {
+        active: true,
+        startX: e.clientX,
+        startY: e.clientY,
+        posAtDragStart: { ...posRef.current },
+      };
     },
-    [scale, position],
+    [],
   );
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
-      if (!isDragging) return;
-      const newX = e.clientX - dragStart.x;
-      const newY = e.clientY - dragStart.y;
-      setPosition(clampPosition(newX, newY, scale));
+      if (!dragRef.current.active) return;
+      const dx = e.clientX - dragRef.current.startX;
+      const dy = e.clientY - dragRef.current.startY;
+      const newX = dragRef.current.posAtDragStart.x + dx;
+      const newY = dragRef.current.posAtDragStart.y + dy;
+      setPosition(clampPosition(newX, newY, scaleRef.current));
     },
-    [isDragging, dragStart, scale, clampPosition],
+    [clampPosition],
   );
 
   const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
+    dragRef.current.active = false;
   }, []);
 
-  const handleDoubleClick = useCallback(() => {
-    if (scale > 1) {
-      resetView();
-    } else {
-      setScale(2.5);
-    }
-  }, [scale, resetView]);
+  const handleDoubleClick = useCallback(
+    (e: React.MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("button")) return;
+      if (scaleRef.current > 1) {
+        resetView();
+      } else {
+        setScale(2.5);
+      }
+    },
+    [resetView],
+  );
 
-  const getTouchDistance = (touches: React.TouchList) => {
+  // --- Touch events (mobile) ---
+  const getTouchDist = (touches: React.TouchList) => {
     const dx = touches[0].clientX - touches[1].clientX;
     const dy = touches[0].clientY - touches[1].clientY;
     return Math.sqrt(dx * dx + dy * dy);
   };
 
-  const getTouchCenter = (touches: React.TouchList) => ({
-    x: (touches[0].clientX + touches[1].clientX) / 2,
-    y: (touches[0].clientY + touches[1].clientY) / 2,
-  });
-
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("button")) return;
+
       if (e.touches.length === 2) {
-        lastTouchDistance.current = getTouchDistance(e.touches);
-        lastTouchCenter.current = getTouchCenter(e.touches);
-      } else if (e.touches.length === 1) {
+        pinchRef.current.lastDist = getTouchDist(e.touches);
+        return;
+      }
+
+      if (e.touches.length === 1) {
         const now = Date.now();
-        if (now - lastTap < 300) {
-          if (scale > 1) {
+        if (now - lastTapRef.current < 300) {
+          if (scaleRef.current > 1) {
             resetView();
           } else {
             setScale(2.5);
           }
-          setLastTap(0);
+          lastTapRef.current = 0;
           return;
         }
-        setLastTap(now);
-        if (scale > 1) {
-          setIsDragging(true);
-          setDragStart({
-            x: e.touches[0].clientX - position.x,
-            y: e.touches[0].clientY - position.y,
-          });
+        lastTapRef.current = now;
+
+        if (scaleRef.current > 1) {
+          e.preventDefault();
+          dragRef.current = {
+            active: true,
+            startX: e.touches[0].clientX,
+            startY: e.touches[0].clientY,
+            posAtDragStart: { ...posRef.current },
+          };
         }
       }
     },
-    [scale, position, lastTap, resetView],
+    [resetView],
   );
 
   const handleTouchMove = useCallback(
     (e: React.TouchEvent) => {
-      e.preventDefault();
-      if (e.touches.length === 2 && lastTouchDistance.current !== null) {
-        const newDist = getTouchDistance(e.touches);
-        const ratio = newDist / lastTouchDistance.current;
-        lastTouchDistance.current = newDist;
+      if (e.touches.length === 2 && pinchRef.current.lastDist > 0) {
+        e.preventDefault();
+        const newDist = getTouchDist(e.touches);
+        const ratio = newDist / pinchRef.current.lastDist;
+        pinchRef.current.lastDist = newDist;
         setScale((prev) => {
-          const next = Math.max(
-            MIN_SCALE,
-            Math.min(MAX_SCALE, prev * ratio),
-          );
-          if (lastTouchCenter.current && containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
-            const cx = lastTouchCenter.current.x - rect.left - rect.width / 2;
-            const cy = lastTouchCenter.current.y - rect.top - rect.height / 2;
-            const scaleChange = next / prev;
-            setPosition((pos) =>
-              clampPosition(
-                cx - (cx - pos.x) * scaleChange,
-                cy - (cy - pos.y) * scaleChange,
-                next,
-              ),
-            );
-          }
-          lastTouchCenter.current = getTouchCenter(e.touches);
+          const next = Math.max(MIN_SCALE, Math.min(MAX_SCALE, prev * ratio));
+          setPosition((pos) => clampPosition(pos.x, pos.y, next));
           return next;
         });
-      } else if (e.touches.length === 1 && isDragging) {
-        const newX = e.touches[0].clientX - dragStart.x;
-        const newY = e.touches[0].clientY - dragStart.y;
-        setPosition(clampPosition(newX, newY, scale));
+        return;
+      }
+
+      if (e.touches.length === 1 && dragRef.current.active) {
+        e.preventDefault();
+        const dx = e.touches[0].clientX - dragRef.current.startX;
+        const dy = e.touches[0].clientY - dragRef.current.startY;
+        const newX = dragRef.current.posAtDragStart.x + dx;
+        const newY = dragRef.current.posAtDragStart.y + dy;
+        setPosition(clampPosition(newX, newY, scaleRef.current));
       }
     },
-    [isDragging, dragStart, scale, clampPosition],
+    [clampPosition],
   );
 
   const handleTouchEnd = useCallback(() => {
-    lastTouchDistance.current = null;
-    lastTouchCenter.current = null;
-    setIsDragging(false);
+    dragRef.current.active = false;
+    pinchRef.current.lastDist = 0;
   }, []);
 
   const handleDownload = useCallback(async () => {
@@ -245,7 +263,7 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
 
       {isOpen && (
         <div
-          className="fixed inset-0 z-[100] bg-black flex flex-col"
+          className="fixed inset-0 z-[100] bg-black flex flex-col select-none"
           onWheel={handleWheel}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -260,12 +278,19 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
           <div
             ref={containerRef}
             className="flex-1 overflow-hidden flex items-center justify-center"
-            style={{ cursor: scale > 1 ? (isDragging ? "grabbing" : "grab") : "zoom-in" }}
+            style={{
+              cursor:
+                scale > 1
+                  ? dragRef.current.active
+                    ? "grabbing"
+                    : "grab"
+                  : "zoom-in",
+            }}
           >
             <img
               src={jpgUrl}
               alt="Infographic"
-              className="max-w-none select-none"
+              className="max-w-none"
               draggable={false}
               style={{
                 transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
