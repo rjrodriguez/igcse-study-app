@@ -29,9 +29,22 @@ const PDFViewer = ({ chapterId, pdfUrl }: PDFViewerProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pdfRef = useRef<any>(null);
 
-  // Load the document once when the URL changes
+  // Validate PDF URL and load document
   useEffect(() => {
     if (!pdfUrl) return;
+
+    // Validate URL scheme
+    try {
+      const url = new URL(pdfUrl, window.location.href);
+      if (url.protocol !== "http:" && url.protocol !== "https:") {
+        throw new Error("Invalid protocol");
+      }
+    } catch {
+      setError("PDF URL must be a valid http/https URL.");
+      setIsLoading(false);
+      return;
+    }
+
     const pdfjsLib = window.pdfjsLib;
     if (!pdfjsLib) {
       setError("PDF.js failed to load. Check your connection and reload.");
@@ -39,7 +52,6 @@ const PDFViewer = ({ chapterId, pdfUrl }: PDFViewerProps) => {
       return;
     }
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_WORKER_SRC;
     setIsLoading(true);
     setError(null);
 
@@ -58,7 +70,7 @@ const PDFViewer = ({ chapterId, pdfUrl }: PDFViewerProps) => {
       });
   }, [pdfUrl]);
 
-  // Render the current page whenever it (or the doc) changes
+  // Render current page whenever it (or the doc) changes
   useEffect(() => {
     const pdf = pdfRef.current;
     const canvas = canvasRef.current;
