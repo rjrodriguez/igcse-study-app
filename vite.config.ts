@@ -43,6 +43,18 @@ export default defineConfig(() => ({
               rangeRequests: true,
             },
           },
+          {
+            urlPattern: ({ url }) =>
+              url.pathname.includes("/media/") ||
+              url.pathname.includes("/pdfs/") ||
+              url.pathname.includes("/jpgs/"),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "local-chapter-assets",
+              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              rangeRequests: true,
+            },
+          },
         ],
       }
     })
