@@ -13,6 +13,7 @@ export const chapters: ChapterData[] = [
     audioUrl: "/media/ch01.mp3",
     videoUrl: "https://www.youtube.com/embed/aZFtu21JFO8",
     pdfUrl: "/pdfs/ch01.pdf",
+    jpgUrl: "/jpgs/ch01.jpg",
   },
   {
     id: 2,
@@ -21,6 +22,7 @@ export const chapters: ChapterData[] = [
     audioUrl: "/media/ch02.mp3",
     videoUrl: "https://www.youtube.com/embed/lp4vbok-FlI",
     pdfUrl: "/pdfs/ch02.pdf",
+    jpgUrl: "/jpgs/ch02.jpg",
   },
   {
     id: 3,
@@ -29,6 +31,7 @@ export const chapters: ChapterData[] = [
     audioUrl: "/media/ch03.mp3",
     videoUrl: "https://www.youtube.com/embed/6dFe93GOF9M",
     pdfUrl: "/pdfs/ch03.pdf",
+    jpgUrl: "/jpgs/ch03.jpg",
   },
   {
     id: 4,
@@ -37,6 +40,7 @@ export const chapters: ChapterData[] = [
     audioUrl: "/media/ch04.mp3",
     videoUrl: "https://www.youtube.com/embed/iZ6Fm2QWN_k",
     pdfUrl: "/pdfs/ch04.pdf",
+    jpgUrl: "/jpgs/ch04.jpg",
   },
   {
     id: 5,
@@ -45,6 +49,7 @@ export const chapters: ChapterData[] = [
     audioUrl: "/media/ch05.mp3",
     videoUrl: "https://www.youtube.com/embed/5fzKoVdm73k",
     pdfUrl: "/pdfs/ch05.pdf",
+    jpgUrl: "/jpgs/ch05.jpg",
   },
   {
     id: 6,
@@ -53,6 +58,7 @@ export const chapters: ChapterData[] = [
     audioUrl: "/media/ch06.mp3",
     videoUrl: "https://www.youtube.com/embed/ra3xGyK5ROc",
     pdfUrl: "/pdfs/ch06.pdf",
+    jpgUrl: "/jpgs/ch06.jpg",
   },
   {
     id: 7,
@@ -61,6 +67,7 @@ export const chapters: ChapterData[] = [
     audioUrl: "/media/ch07.mp3",
     videoUrl: "https://www.youtube.com/embed/onVLLtDOAH4",
     pdfUrl: "/pdfs/ch07.pdf",
+    jpgUrl: "/jpgs/ch07.jpg",
   },
   {
     id: 8,
@@ -69,6 +76,7 @@ export const chapters: ChapterData[] = [
     audioUrl: "/media/ch08.mp3",
     videoUrl: "https://www.youtube.com/embed/pPQldIrgoBU",
     pdfUrl: "/pdfs/ch08.pdf",
+    jpgUrl: "/jpgs/ch08.jpg",
   },
   {
     id: 9,
@@ -77,6 +85,7 @@ export const chapters: ChapterData[] = [
     audioUrl: "/media/ch09.mp3",
     videoUrl: "https://www.youtube.com/embed/cnekImVPB4U",
     pdfUrl: "/pdfs/ch09.pdf",
+    jpgUrl: "/jpgs/ch09.jpg",
   },
   {
     id: 10,
@@ -85,6 +94,7 @@ export const chapters: ChapterData[] = [
     audioUrl: "/media/ch10.mp3",
     videoUrl: "https://www.youtube.com/embed/tKQgmKR6Y5Q",
     pdfUrl: "/pdfs/ch10.pdf",
+    jpgUrl: "/jpgs/ch10.jpg",
   }
 ];
 

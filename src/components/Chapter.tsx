@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import MediaPlayer from "@/components/MediaPlayer";
 import PDFViewer from "@/components/PDFViewer";
+import InfographicViewer from "@/components/InfographicViewer";
 import { chapters } from "@/data/chapters";
 
 const Chapter = () => {
@@ -41,21 +42,23 @@ const Chapter = () => {
           </div>
           
           <div className="space-y-6">
+            <InfographicViewer jpgUrl={chapter.jpgUrl} />
+            
             <div>
               <h2 className="text-xl font-semibold text-gray-800 mb-3">Audio Content</h2>
-              <MediaPlayer 
-                chapterId={chapterId} 
-                mediaType="audio" 
-                audioUrl={chapter.audioUrl} 
+              <MediaPlayer
+                chapterId={chapterId}
+                mediaType="audio"
+                audioUrl={chapter.audioUrl}
               />
             </div>
             
             <div>
               <h2 className="text-xl font-semibold text-gray-800 mb-3">Video Content</h2>
-              <MediaPlayer 
-                chapterId={chapterId} 
-                mediaType="video" 
-                videoUrl={chapter.videoUrl} 
+              <MediaPlayer
+                chapterId={chapterId}
+                mediaType="video"
+                videoUrl={chapter.videoUrl}
               />
             </div>
             

@@ -5,6 +5,7 @@ export interface ChapterData {
   audioUrl: string;
   videoUrl: string;
   pdfUrl: string;
+  jpgUrl: string;
 }
 
 export interface ChapterProgress {
