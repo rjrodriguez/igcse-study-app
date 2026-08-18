@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useProgress } from "@/hooks/use-progress";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -20,9 +20,9 @@ const Chapter = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">Chapter Not Found</h1>
-          <a href="/" className="text-indigo-600 hover:underline">
+          <Link to="/" className="text-indigo-600 hover:underline">
             Return to Home
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -31,9 +31,9 @@ const Chapter = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <a href="/" className="text-indigo-600 hover:underline mb-4 inline-block">
+        <Link to="/" className="text-indigo-600 hover:underline mb-4 inline-block">
           ← Back to Chapters
-        </a>
+        </Link>
         
         <Card className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex flex-col items-center justify-center mb-6">

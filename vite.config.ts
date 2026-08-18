@@ -10,16 +10,9 @@ export default defineConfig(() => ({
     dyadComponentTagger(),
     react(),
     VitePWA({
-      registerType: "inject",
-      manifest: {
-        name: "IGCSE Study App",
-        short_name: "IGCSEStudyApp",
-        theme_color: "#1a237e",
-        icons: [
-          { src: "icons/icon-192.svg", sizes: "192x192", type: "image/svg+xml" },
-          { src: "icons/icon-512.svg", sizes: "512x512", type: "image/svg+xml" }
-        ]
-      },
+      injectRegister: "inline",
+      registerType: "autoUpdate",
+      manifest: false,
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
         runtimeCaching: [
