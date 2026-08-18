@@ -13,10 +13,10 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
   const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? -0.1 : 0.1;
-    setScale((prev) => Math.max(0.5, Math.min(5, prev + delta));
-  };
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      setScale((prev) => Math.max(0.5, Math.min(5, prev + delta)));
+    };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -87,6 +87,8 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
             transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
             transformOrigin: "0 0",
             pointerEvents: "none",
+            width: "100%",
+            height: "100%"
           }}
         />
       </div>
