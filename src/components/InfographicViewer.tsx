@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   ZoomIn,
   ZoomOut,
@@ -20,180 +20,19 @@ const ZOOM_STEP = 0.25;
 const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scale, setScale] = useState(1);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [showInstructions, setShowInstructions] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const dragRef = useRef({
-    active: false,
-    startX: 0,
-    startY: 0,
-    posAtDragStart: { x: 0, y: 0 },
-  });
-  const pinchRef = useRef({ lastDist: 0 });
-  const lastTapRef = useRef(0);
-  const scaleRef = useRef(scale);
-  const posRef = useRef(position);
-
-  scaleRef.current = scale;
-  posRef.current = position;
-
   const resetView = useCallback(() => {
     setScale(1);
-    setPosition({ x: 0, y: 0 });
   }, []);
 
-  const clampPosition = useCallback(
-    (x: number, y: number, s: number) => {
-      if (s <= 1) return { x: 0, y: 0 };
-      const container = containerRef.current;
-      if (!container) return { x, y };
-      const { width, height } = container.getBoundingClientRect();
-      const maxX = (width * (s - 1)) / 2;
-      const maxY = (height * (s - 1)) / 2;
-      return {
-        x: Math.max(-maxX, Math.min(maxX, x)),
-        y: Math.max(-maxY, Math.min(maxY, y)),
-      };
-    },
-    [],
-  );
-
-  const handleWheel = useCallback(
-    (e: React.WheelEvent) => {
-      e.preventDefault();
-      const delta = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
-      setScale((prev) => {
-        const next = Math.max(MIN_SCALE, Math.min(MAX_SCALE, prev + delta));
-        setPosition((pos) => clampPosition(pos.x, pos.y, next));
-        return next;
-      });
-    },
-    [clampPosition],
-  );
-
-  // --- Mouse events (desktop) ---
-  const handleMouseDown = useCallback(
-    (e: React.MouseEvent) => {
-      if (e.button !== 0) return;
-      const target = e.target as HTMLElement;
-      if (target.closest("button")) return;
-      if (scaleRef.current <= 1) return;
-
-      e.preventDefault();
-      dragRef.current = {
-        active: true,
-        startX: e.clientX,
-        startY: e.clientY,
-        posAtDragStart: { ...posRef.current },
-      };
-    },
-    [],
-  );
-
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!dragRef.current.active) return;
-      const dx = e.clientX - dragRef.current.startX;
-      const dy = e.clientY - dragRef.current.startY;
-      const newX = dragRef.current.posAtDragStart.x + dx;
-      const newY = dragRef.current.posAtDragStart.y + dy;
-      setPosition(clampPosition(newX, newY, scaleRef.current));
-    },
-    [clampPosition],
-  );
-
-  const handleMouseUp = useCallback(() => {
-    dragRef.current.active = false;
+  const handleZoomIn = useCallback(() => {
+    setScale((prev) => Math.min(MAX_SCALE, prev + ZOOM_STEP));
   }, []);
 
-  const handleDoubleClick = useCallback(
-    (e: React.MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest("button")) return;
-      if (scaleRef.current > 1) {
-        resetView();
-      } else {
-        setScale(2.5);
-      }
-    },
-    [resetView],
-  );
-
-  // --- Touch events (mobile) ---
-  const getTouchDist = (touches: React.TouchList) => {
-    const dx = touches[0].clientX - touches[1].clientX;
-    const dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
-
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest("button")) return;
-
-      if (e.touches.length === 2) {
-        pinchRef.current.lastDist = getTouchDist(e.touches);
-        return;
-      }
-
-      if (e.touches.length === 1) {
-        const now = Date.now();
-        if (now - lastTapRef.current < 300) {
-          if (scaleRef.current > 1) {
-            resetView();
-          } else {
-            setScale(2.5);
-          }
-          lastTapRef.current = 0;
-          return;
-        }
-        lastTapRef.current = now;
-
-        if (scaleRef.current > 1) {
-          e.preventDefault();
-          dragRef.current = {
-            active: true,
-            startX: e.touches[0].clientX,
-            startY: e.touches[0].clientY,
-            posAtDragStart: { ...posRef.current },
-          };
-        }
-      }
-    },
-    [resetView],
-  );
-
-  const handleTouchMove = useCallback(
-    (e: React.TouchEvent) => {
-      if (e.touches.length === 2 && pinchRef.current.lastDist > 0) {
-        e.preventDefault();
-        const newDist = getTouchDist(e.touches);
-        const ratio = newDist / pinchRef.current.lastDist;
-        pinchRef.current.lastDist = newDist;
-        setScale((prev) => {
-          const next = Math.max(MIN_SCALE, Math.min(MAX_SCALE, prev * ratio));
-          setPosition((pos) => clampPosition(pos.x, pos.y, next));
-          return next;
-        });
-        return;
-      }
-
-      if (e.touches.length === 1 && dragRef.current.active) {
-        e.preventDefault();
-        const dx = e.touches[0].clientX - dragRef.current.startX;
-        const dy = e.touches[0].clientY - dragRef.current.startY;
-        const newX = dragRef.current.posAtDragStart.x + dx;
-        const newY = dragRef.current.posAtDragStart.y + dy;
-        setPosition(clampPosition(newX, newY, scaleRef.current));
-      }
-    },
-    [clampPosition],
-  );
-
-  const handleTouchEnd = useCallback(() => {
-    dragRef.current.active = false;
-    pinchRef.current.lastDist = 0;
+  const handleZoomOut = useCallback(() => {
+    setScale((prev) => Math.max(MIN_SCALE, prev - ZOOM_STEP));
   }, []);
 
   const handleDownload = useCallback(async () => {
@@ -224,19 +63,6 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
-      if (e.key === "Escape") setIsOpen(false);
-      if (e.key === "+" || e.key === "=")
-        setScale((p) => Math.min(MAX_SCALE, p + ZOOM_STEP));
-      if (e.key === "-") setScale((p) => Math.max(MIN_SCALE, p - ZOOM_STEP));
-      if (e.key === "0") resetView();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, resetView]);
-
   return (
     <div className="w-full mb-6">
       <h2 className="text-xl font-semibold text-gray-800 mb-2">Infografía</h2>
@@ -264,28 +90,11 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
       {isOpen && (
         <div
           className="fixed inset-0 z-[100] bg-black flex flex-col select-none"
-          onWheel={handleWheel}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onDoubleClick={handleDoubleClick}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          style={{ touchAction: "none" }}
         >
           <div
             ref={containerRef}
-            className="flex-1 overflow-hidden flex items-center justify-center"
-            style={{
-              cursor:
-                scale > 1
-                  ? dragRef.current.active
-                    ? "grabbing"
-                    : "grab"
-                  : "zoom-in",
-            }}
+            className="flex-1 overflow-auto flex items-center justify-center"
+            style={{ touchAction: "pan-zoom" }}
           >
             <img
               src={jpgUrl}
@@ -293,8 +102,10 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
               className="max-w-none"
               draggable={false}
               style={{
-                transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
+                transform: `scale(${scale})`,
                 transformOrigin: "center center",
+                width: "fit-content",
+                height: "fit-content",
               }}
             />
           </div>
@@ -325,16 +136,12 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
                 </button>
               </div>
               <p className="flex items-center gap-2">
-                <ZoomIn className="w-3.5 h-3.5 shrink-0" />
-                Pinch to zoom in/out
-              </p>
-              <p className="flex items-center gap-2">
                 <Move className="w-3.5 h-3.5 shrink-0" />
-                Drag to pan when zoomed
+                Drag to pan and zoom
               </p>
               <p className="flex items-center gap-2">
-                <Info className="w-3.5 h-3.5 shrink-0" />
-                Double-tap to toggle zoom
+                <ZoomIn className="w-3.5 h-3.5 shrink-0" />
+                Use buttons for additional zoom
               </p>
             </div>
           )}
@@ -342,9 +149,7 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
           <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent">
             <div className="flex items-center justify-center gap-1">
               <button
-                onClick={() =>
-                  setScale((p) => Math.max(MIN_SCALE, p - ZOOM_STEP))
-                }
+                onClick={handleZoomOut}
                 disabled={scale <= MIN_SCALE}
                 className="text-white/80 hover:text-white disabled:text-white/30 p-2 rounded-full hover:bg-white/10 transition-colors"
                 aria-label="Zoom out"
@@ -357,9 +162,7 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
               </span>
 
               <button
-                onClick={() =>
-                  setScale((p) => Math.min(MAX_SCALE, p + ZOOM_STEP))
-                }
+                onClick={handleZoomIn}
                 disabled={scale >= MAX_SCALE}
                 className="text-white/80 hover:text-white disabled:text-white/30 p-2 rounded-full hover:bg-white/10 transition-colors"
                 aria-label="Zoom in"
