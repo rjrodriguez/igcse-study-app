@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
   ZoomIn,
   ZoomOut,
