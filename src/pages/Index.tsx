@@ -28,11 +28,11 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-indigo-600 mb-8 text-center">IGCSE Study App</h1>
-        <p className="text-lg text-gray-600 mb-12">Learn with audio, video, and PDF content</p>
+        <p className="text-lg text-gray-600 mb-12 text-center">Learn with audio, video, and PDF content</p>
         
         <ChapterCardList />
         
-        <div className="mt-16">
+        <div className="mt-16 text-center">
           <p className="text-lg text-gray-500 mb-4">
             {getCompletedCount()} chapters completed
           </p>
