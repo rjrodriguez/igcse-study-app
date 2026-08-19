@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import {
   ZoomIn,
   ZoomOut,
@@ -17,7 +17,18 @@ const MIN_SCALE = 0.5;
 const MAX_SCALE = 5;
 const ZOOM_STEP = 0.25;
 
+function sanitizeImageUrl(raw: string): string | null {
+  try {
+    const url = new URL(raw, window.location.href);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+    return url.href;
+  } catch {
+    return null;
+  }
+}
+
 const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
+  const safeUrl = useMemo(() => sanitizeImageUrl(jpgUrl), [jpgUrl]);
   const [isOpen, setIsOpen] = useState(false);
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -197,21 +208,22 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
   }, []);
 
   const handleDownload = useCallback(async () => {
+    if (!safeUrl) return;
     try {
-      const response = await fetch(jpgUrl);
+      const response = await fetch(safeUrl);
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = jpgUrl.split("/").pop() || "infographic.jpg";
+      a.download = safeUrl.split("/").pop() || "infographic.jpg";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch {
-      window.open(jpgUrl, "_blank");
+      window.open(safeUrl, "_blank");
     }
-  }, [jpgUrl]);
+  }, [safeUrl]);
 
   useEffect(() => {
     if (isOpen) {
@@ -241,6 +253,7 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
     <div className="w-full mb-6">
       <h2 className="text-xl font-semibold text-gray-800 mb-2">Infografía</h2>
 
+      {safeUrl && (
       <button
         onClick={() => {
           resetView();
@@ -249,7 +262,7 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
         className="relative w-full group cursor-zoom-in rounded-lg overflow-hidden border border-gray-200 bg-gray-100"
       >
         <img
-          src={jpgUrl}
+          src={safeUrl}
           alt="Infographic thumbnail"
           className="w-full h-auto object-contain max-h-64"
           draggable={false}
@@ -260,8 +273,9 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
           </div>
         </div>
       </button>
+      )}
 
-      {isOpen && (
+      {isOpen && safeUrl && (
         <div
           className="fixed inset-0 z-[100] bg-black flex flex-col select-none"
           onWheel={handleWheel}
@@ -288,7 +302,7 @@ const InfographicViewer = ({ jpgUrl }: InfographicViewerProps) => {
             }}
           >
             <img
-              src={jpgUrl}
+              src={safeUrl}
               alt="Infographic"
               className="max-w-none"
               draggable={false}

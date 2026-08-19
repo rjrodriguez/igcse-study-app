@@ -26,6 +26,7 @@ const PDFViewer = ({ chapterId, pdfUrl }: PDFViewerProps) => {
   const [error, setError] = useState<string | null>(null);
   const [numPages, setNumPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [validatedUrl, setValidatedUrl] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pdfRef = useRef<any>(null);
 
@@ -33,18 +34,21 @@ const PDFViewer = ({ chapterId, pdfUrl }: PDFViewerProps) => {
   useEffect(() => {
     if (!pdfUrl) return;
 
-    // Validate URL scheme
+    let safe: string;
     try {
       const url = new URL(pdfUrl, window.location.href);
       if (url.protocol !== "http:" && url.protocol !== "https:") {
         throw new Error("Invalid protocol");
       }
+      safe = url.href;
     } catch {
       setError("PDF URL must be a valid http/https URL.");
+      setValidatedUrl(null);
       setIsLoading(false);
       return;
     }
 
+    setValidatedUrl(safe);
     const pdfjsLib = window.pdfjsLib;
     if (!pdfjsLib) {
       setError("PDF.js failed to load. Check your connection and reload.");
@@ -55,7 +59,7 @@ const PDFViewer = ({ chapterId, pdfUrl }: PDFViewerProps) => {
     setIsLoading(true);
     setError(null);
 
-    const loadingTask = pdfjsLib.getDocument(pdfUrl);
+    const loadingTask = pdfjsLib.getDocument(safe);
     loadingTask.promise
       .then((pdf: any) => {
         pdfRef.current = pdf;
@@ -126,7 +130,7 @@ const PDFViewer = ({ chapterId, pdfUrl }: PDFViewerProps) => {
           </div>
 
           <a
-            href={pdfUrl}
+            href={validatedUrl || "#"}
             download
             className="text-sm font-medium text-indigo-600 hover:underline"
           >
