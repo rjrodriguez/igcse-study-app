@@ -1,50 +1,106 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ChapterProgress, UserProgress } from "@/data/types";
 
 const STORAGE_KEY = "study_app_progress";
 
+const defaultProgress: ChapterProgress = {
+  completed: false,
+  audioPosition: 0,
+  videoPosition: 0,
+  lastAccessed: new Date().toISOString(),
+};
+
 export function useProgress(chapterId: number) {
   const [progress, setProgress] = useState<ChapterProgress>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      return parsed[chapterId] || { completed: false, audioPosition: 0, videoPosition: 0, lastAccessed: new Date().toISOString() };
+    if (typeof window === "undefined") return defaultProgress;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const allProgress: UserProgress = JSON.parse(stored);
+        return allProgress[chapterId] || defaultProgress;
+      }
+    } catch (e) {
+      console.error("Failed to load progress from localStorage:", e);
     }
-    return { completed: false, audioPosition: 0, videoPosition: 0, lastAccessed: new Date().toISOString() };
+    return defaultProgress;
   });
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed: UserProgress = JSON.parse(saved);
-      if (parsed[chapterId]) {
-        setProgress(parsed[chapterId]);
-      }
+  const saveProgress = useCallback((newProgress: ChapterProgress) => {
+    setProgress(newProgress);
+    if (typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const allProgress: UserProgress = stored ? JSON.parse(stored) : {};
+      allProgress[chapterId] = newProgress;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(allProgress));
+    } catch (e) {
+      console.error("Failed to save progress to localStorage:", e);
     }
   }, [chapterId]);
 
-  const updateProgress = (newProgress: Partial<ChapterProgress>) => {
-    const updated = {...progress,...newProgress, lastAccessed: new Date().toISOString() };
-    setProgress(updated);
+  const markCompleted = useCallback(() => {
+    saveProgress({
+      ...progress,
+      completed: true,
+      lastAccessed: new Date().toISOString(),
+    });
+  }, [progress, saveProgress]);
 
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const parsed: UserProgress = saved? JSON.parse(saved) : {};
-    parsed[chapterId] = updated;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+  const updateMediaPosition = useCallback(
+    (type: "audio" | "video", position: number) => {
+      saveProgress({
+        ...progress,
+        [type + "Position"]: position,
+        lastAccessed: new Date().toISOString(),
+      });
+    },
+    [progress, saveProgress]
+  );
+
+  const resetProgress = useCallback(() => {
+    saveProgress(defaultProgress);
+  }, [saveProgress]);
+
+  return {
+    progress,
+    saveProgress,
+    markCompleted,
+    updateMediaPosition,
+    resetProgress,
   };
-
-  return { progress, updateProgress };
 }
 
 export function useAllProgress() {
   const [allProgress, setAllProgress] = useState<UserProgress>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved? JSON.parse(saved) : {};
+    if (typeof window === "undefined") return {};
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch (e) {
+      console.error("Failed to load progress from localStorage:", e);
+      return {};
+    }
   });
 
-  const getCompletedCount = () => {
-    return Object.values(allProgress).filter(p => p.completed).length;
-  };
+  const getProgress = useCallback((chapterId: number): ChapterProgress => {
+    return allProgress[chapterId] || defaultProgress;
+  }, [allProgress]);
 
-  return { allProgress, getCompletedCount };
+  const isCompleted = useCallback(
+    (chapterId: number): boolean => {
+      return getProgress(chapterId).completed;
+    },
+    [getProgress]
+  );
+
+  const getCompletedCount = useCallback((): number => {
+    return Object.values(allProgress).filter((p) => p.completed).length;
+  }, [allProgress]);
+
+  return {
+    allProgress,
+    getProgress,
+    isCompleted,
+    getCompletedCount,
+  };
 }
